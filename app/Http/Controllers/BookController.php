@@ -14,14 +14,14 @@ class BookController
      * @param Request $request
      * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
      */
-    public function addBook(BookRequest $request){
+    public function addBook(BookRequest $request)
+    {
         $data = $request->all();
 
-        $bookedPeriods = Book::where('status','active')->select('check_in', 'check_out')->get();
+        $bookedPeriods = Book::where('status', 'active')->select('check_in', 'check_out')->get();
 
         $selectedCheckIn = Carbon::parse($data['check_in']);
         $selectedCheckOut = Carbon::parse($data['check_out']);
-
 
         foreach ($bookedPeriods as $bookedPeriod) {
             $bookedCheckIn = Carbon::parse($bookedPeriod->check_in);
@@ -39,7 +39,7 @@ class BookController
             }
         }
 
-        $admin_type = $request->input('admin_type');
+        $adminType = $request->input('admin_type');
         unset($data['admin_type']);
 
         $data['check_in'] = \DateTime::createFromFormat('d.m.Y', $data['check_in'])->format('Y-m-d');
@@ -47,20 +47,16 @@ class BookController
         $data['tel'] = Crypt::encryptString($data['tel']);
         Book::create($data);
 
-        if ($admin_type) {
-            $route = 'admin.dashboard';
-        } else {
-            $route = 'home';
-        }
+        $route = $adminType ? 'admin.dashboard' : 'home';
+
         return redirect(route($route))->with('success', 'Запис доданий успішно.');
-
     }
-
 
     /**
      * @return \Illuminate\Http\JsonResponse
      */
-    public function getDates(){
+    public function getDates()
+    {
         $bookedPeriods = Book::where('status', 'active')->select('check_in', 'check_out')->get();
 
         $allDates = [];
@@ -81,7 +77,8 @@ class BookController
      * @param $end
      * @return array
      */
-    private function getDatesInRange($start, $end) {
+    private function getDatesInRange($start, $end)
+    {
         $dates = [];
         $current = $start->copy();
 
@@ -97,7 +94,8 @@ class BookController
      * @param Request $request
      * @return void
      */
-    public function changeBook(Request $request){
+    public function changeBook(Request $request)
+    {
         $data = $request->all();
         $book = Book::find($data['bookId']);
 
@@ -110,7 +108,8 @@ class BookController
      * @param Request $request
      * @return void
      */
-    public function deleteBook(Request $request){
+    public function deleteBook(Request $request)
+    {
         $data = $request->all();
         $book = Book::find($data['bookId']);
         $book->delete();
