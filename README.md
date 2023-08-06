@@ -12,12 +12,12 @@
 1. Клонируйте репозиторий проекта:
 
 ```bash
-git clone https://github.com/ваш-username/название-репозитория.git
+git clone https://github.com/ArseniyZenzerya/hotel-test.git
 ```
 
 2. Перейдите в директорию проекта:
 ```bash
-cd название-репозитория
+cd hotel-test
 ```
 3. Установите зависимости PHP через Composer:
 ```bash
